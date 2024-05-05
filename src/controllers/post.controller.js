@@ -167,6 +167,7 @@ const uploadPost = async (req, res) => {
       if (!notes) {
         return res.status(500).json({ message:"no notes is belongs to this depertment" }); 
       }
+      return res.status(200).json({notes})
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong", error: error }); 
     }
