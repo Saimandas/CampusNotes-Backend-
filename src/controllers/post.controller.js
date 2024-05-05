@@ -158,12 +158,12 @@ const uploadPost = async (req, res) => {
           }
         }
       },
-       {
+ {
          $match: {
-           "DeptNotes.name":depertment
+           "DeptNotes.depertmentName":"BCA"
          }
        }
-      ])
+       ])
       if (!notes) {
         return res.status(500).json({ message:"no notes is belongs to this depertment" }); 
       }
