@@ -37,13 +37,15 @@ const uploadPost = async (req, res) => {
 
         const subjectSchema = await new Subject({
             name: subject,
+            notes:post._id
         });
-        subjectSchema.notes.push(post._id);
+       
 
         const depertmentSchema = await new Depertment({
-            depertmentName: depertment 
+            depertmentName: depertment,
+            notes:post._id
         });
-        depertmentSchema.notes.push(post._id);
+     
         post.subject = subjectSchema._id;
         post.depertment = depertmentSchema._id;
 
@@ -81,14 +83,94 @@ const uploadPost = async (req, res) => {
         }
     }
 
-  const verifyNotes= async(req,res)=>{
-    
-    const allNotes=await Notes.find()
+  const listNotesForVerification= async(req,res)=>{
+    const allNotes= await User.find()
     return res.status(200).json({allNotes})
-
   }
-    
- 
+
+  const verifyNotes= async (req,res)=>{
+
+    const {notes_id,verifyFlag}=req.body
+    const notes= await Notes.findById(notes_id)
+    if (verifyFlag) {
+        notes.isVerified=true
+       await notes.save()
+       return res.status(200).json({message:"succesfylly verified the notes"})
+    }else{
+      await  Notes.findByIdAndDelete(notes_id)
+      return res.status(200).json({message:"succesfully rejected notes"})
+    }
+  }
+
+  const getNotesBySubject= async (req,res)=>{
+    try {
+        const subject  = req.params.subject
+        if (!subject) {
+            return res.status(400).json({message:"Invalid params"})
+        }
+       
+        const notes= await Notes.aggregate([{
+            $lookup: {
+              from: "subjects",
+              localField:"subject",
+              foreignField:"_id",
+              as: "SubjectNotes"
+            }
+          },{
+            $addFields: {
+              SubNotes:{
+                $arrayElemAt:["$SubjectNotes",0]
+              }
+            }
+          },
+           {
+             $match: {
+               "SubNotes.name": subject
+             }
+           }
+          ])
+        if (!notes) {
+          return res.status(500).json({ message:"no notes is belongs to this subject" }); 
+        }
+          return res.status(200).json({notes})
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong", error: error }); 
+    }
+  }
+
+  const getNotesByDepertment= async(req,res)=>{
+    try {
+      const depertment= req.params.depertment
+      if (!depertment) {
+        return res.status(400).json({message:"Invalid params"})
+      }
+      const notes= await Notes.aggregate([{
+        $lookup: {
+          from: "depertments",
+          localField:"depertment",
+          foreignField:"_id",
+          as: "DepertmentNotes"
+        }
+      },{
+        $addFields: {
+          DeptNotes:{
+            $arrayElemAt:["$DepertmentNotes",0]
+          }
+        }
+      },
+       {
+         $match: {
+           "DeptNotes.name":depertment
+         }
+       }
+      ])
+      if (!notes) {
+        return res.status(500).json({ message:"no notes is belongs to this depertment" }); 
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong", error: error }); 
+    }
+  }
 export {
-    uploadPost,deletePost,verifyNotes
+    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment
 }

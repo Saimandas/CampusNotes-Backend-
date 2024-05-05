@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { logIn, logOut, signUp, usernameCheck,loginWithGoogle} from "../controllers/user.controler.js";
-import { deletePost, uploadPost, verifyNotes } from "../controllers/post.controller.js";
+import { deletePost, getNotesBySubject, uploadPost, verifyNotes,getNotesByDepertment } from "../controllers/post.controller.js";
 import {passport} from '../app.js'
 import { upload } from "../middlewares/multer.js";
 import {isLoggedIn} from '../middlewares/auth.js'
@@ -20,5 +20,6 @@ upload.fields([{
 )
 router.route("/delete-notes").post(deletePost)
 router.route("/verify-notes").post(verifyNotes)
-
+router.route("/Sub-notes/:subject").get(getNotesBySubject)
+router.route("/Dept-notes/:depertment").get(getNotesByDepertment)
 export default router

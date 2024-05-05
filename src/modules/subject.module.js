@@ -4,10 +4,10 @@ const subjectSchema= new mongoose.Schema({
     name:{
         type:String,
     },
-    notes:[{
+    notes:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Notes"
-    }]
+    }
 
     
 },{timestamps:true})

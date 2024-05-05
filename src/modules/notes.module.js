@@ -21,6 +21,9 @@ const notesSchema= new mongoose.Schema({
     user_id:{
         type:String,
         required:false
+    },
+    isVerified:{
+        type:Boolean,
     }
     
     

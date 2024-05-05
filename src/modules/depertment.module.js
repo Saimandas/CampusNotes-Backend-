@@ -4,10 +4,10 @@ const depertmentSchema= new mongoose.Schema({
     depertmentName:{
         type:String
     },
-    notes:[{
+    notes:{
         type:mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }]
+    }
     
 },{timestamps:true})
 
