@@ -172,6 +172,19 @@ const uploadPost = async (req, res) => {
       return res.status(500).json({ message: "Something went wrong", error: error }); 
     }
   }
+
+  const displayNotes= async(req,res)=>{
+    try {
+      const notes= await Notes.find({isVerified:true})
+      if (!notes) {
+        return res.status(500).json({message:"notes are not verified"})
+      }
+
+      return res.status(200).json({notes})
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong", error: error }); 
+    }
+  }
 export {
-    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment
+    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification
 }
