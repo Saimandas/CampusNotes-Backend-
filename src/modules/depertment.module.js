@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const depertmentSchema= new mongoose.Schema({
     depertmentName:{
-        type:String
+        type:String,
+        unique:false
     },
     notes:{
         type:mongoose.Schema.Types.ObjectId,

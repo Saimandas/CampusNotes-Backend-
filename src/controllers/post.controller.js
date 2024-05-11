@@ -84,7 +84,12 @@ const uploadPost = async (req, res) => {
     }
 
   const listNotesForVerification= async(req,res)=>{
-    const allNotes= await User.find()
+    const email= req.user.email
+    if (!email==="dhirajdas55555@gmail.com") {
+      return res.status(200).json({message:"only admins can verify notes"})
+    }
+    const allNotes= await Notes.find()
+    console.log(allNotes);
     return res.status(200).json({allNotes})
   }
 
@@ -176,7 +181,7 @@ const uploadPost = async (req, res) => {
   const displayNotes= async(req,res)=>{
     try {
       const notes= await Notes.find({isVerified:true})
-      if (!notes) {
+      if (notes[0]==null) {
         return res.status(500).json({message:"notes are not verified"})
       }
 
@@ -186,5 +191,5 @@ const uploadPost = async (req, res) => {
     }
   }
 export {
-    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification
+    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification,displayNotes
 }

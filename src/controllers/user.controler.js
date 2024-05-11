@@ -45,7 +45,7 @@ const usernameCheck= async (req,res)=>{
     if (!result.success) {
         const errMsg= result.error.format().username?._errors || []
         console.log(errMsg);
-        return res.status(401).json({succes:false,error:errMsg.length>0?errMsg.join(" ,"):"invalid query params",message:"invalid query params"})
+        return res.status(401).json({succes:false,message:errMsg.length>0?errMsg.join(" ,"):"invalid query params"})
     }
 
     const {username}= result.data
@@ -58,24 +58,29 @@ const usernameCheck= async (req,res)=>{
 }
 
 const logIn= async(req,res)=>{
-     const {email,password}= req.body
-     const user= await User.findOne({email})
-     if (!user) {
-        return res.status(404).json({succes:false,message:"user doest not exist"})
+     try {
+        const {email,password}= req.body
+        const user= await User.findOne({email}).select("--password")
+        if (!user) {
+           return res.status(404).json({succes:false,message:"user doest not exist"})
+        }
+        const isPasswordCorrect= await bcryptjs.compare(password,user.password)
+        if (!isPasswordCorrect) {
+           return res.status(402).json({succes:false,message:"password is invalid"})
+        }
+        const tokenData= {_id:user._id.toString()}
+        user.Token= tokenData
+        await user.save()
+        const token= await Jwt.sign(tokenData,process.env.TOKEN_SECRET,{expiresIn:"10d"})
+        const option={
+           httpOnly:true,
+           secure:true
+        }
+       return res.status(200).cookie("token",token,option).json({message:"user succesfyly logged in",user
+   })
+     } catch (error) {
+        return res.status(500).json({error, message:"Something went wrong"})
      }
-     const isPasswordCorrect= await bcryptjs.compare(password,user.password)
-     if (!isPasswordCorrect) {
-        return res.status(402).json({succes:false,message:"password is invalid"})
-     }
-     const tokenData= {_id:user._id.toString()}
-     user.Token= tokenData
-     await user.save()
-     const token= await Jwt.sign(tokenData,process.env.TOKEN_SECRET,{expiresIn:"10d"})
-     const option={
-        httpOnly:true,
-        secure:true
-     }
-    return res.status(200).cookie("token",token,option).json({message:"user succesfyly logged in"})
 }
 
 const logOut= async (req,res)=>{
