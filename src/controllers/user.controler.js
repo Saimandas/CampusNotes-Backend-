@@ -8,10 +8,11 @@ const signUp= async(req,res)=>{
    try {
      const {username,password,email}= req.body
  
-     const user=await User.findOne({username})
+     const user=await User.findOne({username,email})
      if (user) {
          return res.status(400).json({succes:false,message:"user already exists please login"})
      }
+     
      const salt= await bcryptjs.genSalt(10)
      const hashedPassword= await bcryptjs.hash(password,salt)
     const newUser= await new User({
