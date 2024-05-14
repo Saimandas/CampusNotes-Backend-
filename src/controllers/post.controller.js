@@ -85,8 +85,8 @@ const uploadPost = async (req, res) => {
 
   const listNotesForVerification= async(req,res)=>{
     const email= req.user.email
-    if (!email==="dhirajdas55555@gmail.com") {
-      return res.status(200).json({message:"only admins can verify notes"})
+    if (email!=="dhirajdas55555@gmail.com") {
+      return res.status(400).json({message:"only admins can verify notes"})
     }
     const allNotes= await Notes.find()
     console.log(allNotes);
