@@ -5,7 +5,7 @@ export async function isLoggedIn(req,res,next){
     try {
         const token= req.cookies?.token
         if (!token) {
-            return res.status(402).json({succes:false,message:"token not found"})
+            return res.status(402).json({succes:false,message:"you need to login to procced"})
         }
    
         const isTokenCorrect= await Jwt.verify(token,process.env.TOKEN_SECRET)
