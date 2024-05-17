@@ -25,7 +25,7 @@ app.use(passport.session());
 passport.use(new Googlestrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: ['https://campusnotes-backend-1.onrender.com/api/v1/users/authGoogle','https://campusnotes-backend-1.onrender.com/api/v1/users/']
+  callbackURL: ['https://campusnotes-backend-1.onrender.com/api/v1/users/authGoogle','https://campus-notes-tihucollege.onrender.com/']
 },
 
     function(accesToken,refereshToken,profile,cb){
