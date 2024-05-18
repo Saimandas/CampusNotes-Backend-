@@ -13,9 +13,7 @@ export async function isLoggedIn(req,res,next){
         if (!isTokenCorrect) {
             return res.status(400).json({message:"token is incorrect"})
         }
-        const user= await User.findOne({
-            Token:isTokenCorrect
-        })
+        const user= await User.findById(isTokenCorrect._id)
         
         if (!user) {
             return res.status(400).json({message:"cant find the user"})
