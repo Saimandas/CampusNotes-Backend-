@@ -70,15 +70,15 @@ const logIn= async(req,res)=>{
            return res.status(402).json({succes:false,message:"password is invalid"})
         }
         const tokenData= {_id:user._id.toString()}
-        user.Token= tokenData
-        await user.save()
-        const token= await Jwt.sign(tokenData,process.env.TOKEN_SECRET,{expiresIn:"10d"})
+        const accesToken= await Jwt.sign(tokenData,process.env.ACCES_TOKEN_SECRET,{expiresIn:"2d"})
+        user.accesToken=accesToken
+        const refreshToken= await Jwt.sign(tokenData,process.env.REFRESH_TOKEN_SECRET)
+        user.refreshToken=refreshToken
         const option={
            httpOnly:false,
            secure:true
         }
-       return res.status(200).cookie("token",token,option).json({message:"user succesfyly logged in",user
-   })
+       return res.status(200).cookie("token",token,option).json({message:"user succesfyly logged in" })
      } catch (error) {
         return res.status(500).json({error, message:"Something went wrong"})
      }
@@ -93,6 +93,19 @@ const logOut= async (req,res)=>{
     return res.status(200).clearCookie("token",option).json({message:"user succesfuly logout"})
 }
 
+const getCurrentUser= async(req,res)=>{
+        try {
+            const token= req.cookies.token;
+            if (!token) {
+                return res.json({message:"invlid token"})
+            }
+            console.log(token);
+            const user = await User.findById(token)
+            return res.json({message:"user get succcesfully",user})
+        } catch (error) {
+            return res.json({message:"somthing went wrong while getting the user",error})
+        }
+}
 const loginWithGoogle= async(req,res)=>{
     try {
         

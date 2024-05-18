@@ -29,8 +29,8 @@ const userSchema= new mongoose.Schema({
           type:String,
           required:[true, "password is required"] 
        },
-       Token:{
-          type:String
+       refreshToken:{
+         type:String
        },
        isAdmin:{
          type: Boolean,
