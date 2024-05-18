@@ -100,10 +100,13 @@ const getCurrentUser= async(req,res)=>{
             const token= req.cookies.accesToken.toString();
             const decodedToken= await Jwt.verify(token,process.env.ACCES_TOKEN_SECRET)
             if (!token) {
-                return res.json({message:"invlid token"})
+                return res.json({succes:false,message:"invlid token"})
             }
             console.log(token);
             const user = await User.findOne({_id:decodedToken._id})
+            if (!user) {
+                return res.json({succes:false,message:"invlid token"})
+            }
             return res.json({message:"user get succcesfully",user})
         } catch (error) {
             return res.json({message:"somthing went wrong while getting the user",error})

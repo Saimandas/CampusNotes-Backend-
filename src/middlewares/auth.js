@@ -8,7 +8,7 @@ export async function isLoggedIn(req,res,next){
             return res.status(402).json({succes:false,message:"you need to login to procced"})
         }
    
-        const isTokenCorrect= await Jwt.verify(token,process.env.TOKEN_SECRET)
+        const isTokenCorrect= await Jwt.verify(token,process.env.ACCES_TOKEN_SECRET)
         ;
         if (!isTokenCorrect) {
             return res.status(400).json({message:"token is incorrect"})
