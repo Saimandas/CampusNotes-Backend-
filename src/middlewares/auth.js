@@ -3,7 +3,7 @@ import User from '../modules/user.module.js'
 import Jwt from 'jsonwebtoken'
 export async function isLoggedIn(req,res,next){
     try {
-        const token= req.cookies?.token
+        const token= req.cookies?.accesToken
         if (!token) {
             return res.status(402).json({succes:false,message:"you need to login to procced"})
         }

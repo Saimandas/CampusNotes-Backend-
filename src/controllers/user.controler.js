@@ -71,14 +71,16 @@ const logIn= async(req,res)=>{
         }
         const tokenData= {_id:user._id.toString()}
         const accesToken= await Jwt.sign(tokenData,process.env.ACCES_TOKEN_SECRET,{expiresIn:"2d"})
-        user.accesToken=accesToken
         const refreshToken= await Jwt.sign(tokenData,process.env.REFRESH_TOKEN_SECRET)
         user.refreshToken=refreshToken
         const option={
-           httpOnly:false,
+           httpOnly:true,
            secure:true
         }
-       return res.status(200).cookie("token",token,option).json({message:"user succesfyly logged in" })
+       return res.status(200)
+       .cookie("accesToken",accesToken,option)
+       .cookie("refreshToken",refreshToken,option)
+       .json({message:"user succesfyly logged in" })
      } catch (error) {
         return res.status(500).json({error, message:"Something went wrong"})
      }
