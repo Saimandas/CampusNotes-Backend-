@@ -97,12 +97,13 @@ const logOut= async (req,res)=>{
 
 const getCurrentUser= async(req,res)=>{
         try {
-            const token= req.cookies.token;
+            const token= req.cookies.accesToken.toString();
+            const decodedToken= await Jwt.verify(token,process.env.ACCES_TOKEN_SECRET)
             if (!token) {
                 return res.json({message:"invlid token"})
             }
             console.log(token);
-            const user = await User.findById(token)
+            const user = await User.findOne({_id:decodedToken._id})
             return res.json({message:"user get succcesfully",user})
         } catch (error) {
             return res.json({message:"somthing went wrong while getting the user",error})
@@ -125,5 +126,5 @@ const loginWithGoogle= async(req,res)=>{
     }
 }
 export{
-    signUp, usernameCheck,logIn,logOut,loginWithGoogle
+    signUp, usernameCheck,logIn,logOut,loginWithGoogle,getCurrentUser
 }

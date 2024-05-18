@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { logIn, logOut, signUp, usernameCheck,loginWithGoogle} from "../controllers/user.controler.js";
+import { logIn, logOut, signUp, usernameCheck,loginWithGoogle, getCurrentUser} from "../controllers/user.controler.js";
 import { deletePost, getNotesBySubject, uploadPost, verifyNotes,getNotesByDepertment ,listNotesForVerification,displayNotes} from "../controllers/post.controller.js";
 import {passport} from '../app.js'
 import { upload } from "../middlewares/multer.js";
@@ -8,6 +8,7 @@ const router=Router();
 
 router.route("/register").post(signUp)
 router.route("/checkUsername/:username").get(usernameCheck)
+router.route("/getCurrentUser").get(getCurrentUser)
 router.route("/login").post(logIn)
 router.route("/logout").post(logOut)
 router.route("/loginWithGoogle").get(passport.authenticate("google",{scope:["profile","email"]}))
