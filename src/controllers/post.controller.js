@@ -3,6 +3,7 @@ import uploadFile from "../utils/cloudnary.js";
 import { Subject } from '../modules/subject.module.js';
 import { Depertment } from '../modules/depertment.module.js';
 import User from "../modules/user.module.js";
+import Jwt from 'jsonwebtoken'
 const uploadPost = async (req, res) => {
     try {
         const { name, subject, depertment } = req.body; 
@@ -84,13 +85,19 @@ const uploadPost = async (req, res) => {
     }
 
   const listNotesForVerification= async(req,res)=>{
-    const email= req.user.email
-    if (email!=="dhirajdas55555@gmail.com") {
-      return res.status(400).json({message:"only admins can verify notes"})
+    const cookie= await req.cookies.accesToken;
+    const decodedToken= await Jwt.verify(cookie,process.env.ACCES_TOKEN_SECRET)
+    const {_id}= decodedToken
+
+    const user= await User.findOne({_id,isAdmin:true})
+
+    if (!user) {
+      return res.status(400).json({message:"only admins can verify notes"}) 
     }
     const allNotes= await Notes.find()
     console.log(allNotes);
-    return res.status(200).json({allNotes})
+    return res.status(200).json({allNotes})  
+    
   }
 
   const verifyNotes= async (req,res)=>{
