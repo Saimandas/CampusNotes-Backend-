@@ -88,11 +88,15 @@ const logIn= async(req,res)=>{
 
 const logOut= async (req,res)=>{
    
-    const option={
-        httpOnly:true,
-        secure:true
+    try {
+        const option={
+            httpOnly:true,
+            secure:true
+        }
+        return res.status(200).clearCookie("accesToken",option).json({message:"user succesfuly logout"})
+    } catch (error) {
+        return res.status(400).json({message:"something went wrong",error})
     }
-    return res.status(200).clearCookie("token",option).json({message:"user succesfuly logout"})
 }
 
 const getCurrentUser= async(req,res)=>{
