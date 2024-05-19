@@ -19,7 +19,7 @@ upload.fields([{
     maxCount:50
 }]), uploadPost
 )
-router.route("/listNotesForAdmin").get(isLoggedIn, listNotesForVerification)
+router.route("/listNotesForAdmin").get(listNotesForVerification)
 router.route("/delete-notes").post(deletePost)
 router.route("/verify-notes").post(verifyNotes)
 router.route("/Sub-notes/:subject").get(getNotesBySubject)
