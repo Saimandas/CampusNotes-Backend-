@@ -8,7 +8,7 @@ const signUp= async(req,res)=>{
    try {
      const {username,password,email}= req.body
  
-     const user=await User.findOne({username,email})
+     const user=await User.findOne({email})
      if (user) {
          return res.status(400).json({succes:false,message:"user already exists please login"})
      }
@@ -102,10 +102,11 @@ const logOut= async (req,res)=>{
 const getCurrentUser= async(req,res)=>{
         try {
             const token= req.cookies.accesToken.toString();
-            const decodedToken= await Jwt.verify(token,process.env.ACCES_TOKEN_SECRET)
             if (!token) {
                 return res.json({succes:false,message:"invlid token"})
             }
+            const decodedToken= await Jwt.verify(token,process.env.ACCES_TOKEN_SECRET)
+           
             console.log(token);
             const user = await User.findOne({_id:decodedToken._id})
             if (!user) {
