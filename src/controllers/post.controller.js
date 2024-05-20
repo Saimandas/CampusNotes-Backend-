@@ -94,7 +94,33 @@ const uploadPost = async (req, res) => {
     if (!user) {
       return res.status(400).json({message:"only admins can verify notes"}) 
     }
-    const allNotes= await Notes.find()
+    const allNotes= await Notes.aggregate([{
+      $lookup: {
+        from: "depertments",
+        localField: "depertment",
+        foreignField:"_id",
+        as: "deptNotes"
+      }
+    },
+     {
+       $lookup: {
+         from: "subjects",
+         localField: "subject",
+         foreignField:"_id",
+         as:"subjectName"
+       }
+     },
+     {
+       $addFields: {
+         depertmentname:{
+           $arrayElemAt:["$deptNotes",0]
+         },
+              subjectname:{
+           $arrayElemAt:["$subjectName",0]
+         }
+       }
+     }
+    ])
     console.log(allNotes);
     return res.status(200).json({allNotes})  
     
