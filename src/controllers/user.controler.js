@@ -95,7 +95,7 @@ const logOut= async (req,res)=>{
         }
         return res.status(200).clearCookie("accesToken",option).json({message:"user succesfuly logout"})
     } catch (error) {
-        return res.status(400).json({message:"something went wrong",error})
+        return res.status(500).json({message:"something went wrong",error})
     }
 }
 
