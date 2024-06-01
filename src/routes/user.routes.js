@@ -12,7 +12,7 @@ router.route("/getCurrentUser").get(getCurrentUser)
 router.route("/login").post(logIn)
 router.route("/logout").post(logOut)
 router.route("/loginWithGoogle").get(passport.authenticate("google",{scope:["profile","email"]}))
-router.route("/authGoogle").post(passport.authenticate("google",{failureRedirect:"/login"}),(req,res)=>{
+router.route("/authGoogle").get(passport.authenticate("google",{failureRedirect:"/login"}),(req,res)=>{
     if (req.isAuthenticated) {
         res.render("https://campus-notes-tihucollege.onrender.com/")
     }
