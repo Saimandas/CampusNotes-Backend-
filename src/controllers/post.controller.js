@@ -223,6 +223,19 @@ const uploadPost = async (req, res) => {
       return res.status(500).json({ message: "Something went wrong", error: error }); 
     }
   }
+
+  const getTotalNumberOfNotes= async(req,res)=>{
+    try {
+        const data= await Notes.countDocuments({isVerified:true});
+        if (!data) {
+          return res.status(400).json({ message: "Something went wrong while counting the documents"}); 
+        }
+
+        return res.status(200).json({count:data,succes:true})
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong", error: error }); 
+    }
+  }
 export {
     uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification,displayNotes
 }
