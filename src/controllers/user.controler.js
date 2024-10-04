@@ -133,6 +133,18 @@ const loginWithGoogle= async(req,res)=>{
         return res.status(501).json({succes:false,message:"something went wrong",error})
     }
 }
+const getTotalUsers= async(req,res)=>{
+    try {
+        const data= await User.countDocuments();
+        if (!data) {
+          return res.status(400).json({ message: "Something went wrong while counting the Users"}); 
+        }
+
+        return res.status(200).json({count:data,succes:true})
+    } catch (error) {
+      return res.status(500).json({ message: "Something went wrong", error: error }); 
+    }
+  }
 export{
-    signUp, usernameCheck,logIn,logOut,loginWithGoogle,getCurrentUser
+    signUp, usernameCheck,logIn,logOut,loginWithGoogle,getCurrentUser,getTotalUsers
 }

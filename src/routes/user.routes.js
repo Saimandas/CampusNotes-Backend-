@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { logIn, logOut, signUp, usernameCheck,loginWithGoogle, getCurrentUser} from "../controllers/user.controler.js";
+import { logIn, logOut, signUp, usernameCheck,loginWithGoogle, getCurrentUser, getTotalUsers} from "../controllers/user.controler.js";
 import { deletePost, getNotesBySubject, uploadPost, verifyNotes,getNotesByDepertment ,listNotesForVerification,displayNotes, getTotalNumberOfNotes} from "../controllers/post.controller.js";
 import {passport} from '../app.js'
 import { upload } from "../middlewares/multer.js";
@@ -31,4 +31,5 @@ router.route("/Sub-notes/:subject").get(getNotesBySubject)
 router.route("/Dept-notes/:depertment").get(getNotesByDepertment)
 router.route("/notes").get(displayNotes)
 router.route("/count-notes").get(getTotalNumberOfNotes)
+router.route("/count-users").get(getTotalUsers)
 export default router
