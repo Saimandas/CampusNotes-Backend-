@@ -237,5 +237,5 @@ const uploadPost = async (req, res) => {
     }
   }
 export {
-    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification,displayNotes
+    uploadPost,deletePost,verifyNotes,getNotesBySubject,getNotesByDepertment,listNotesForVerification,displayNotes,getTotalNumberOfNotes
 }
