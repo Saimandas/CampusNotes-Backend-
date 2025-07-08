@@ -127,8 +127,12 @@ const uploadPost = async (req, res) => {
   }
 
   const verifyNotes= async (req,res)=>{
-
     const {notes_id,verifyFlag}=req.body
+    console.log(req.body);
+    
+    if (!notes_id) {
+      return  res.status(400).json({succes:false,message:"invalid notesId"})
+    }
     const notes= await Notes.findById(notes_id)
     if (verifyFlag) {
         notes.isVerified=true

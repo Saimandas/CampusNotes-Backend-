@@ -8,7 +8,9 @@ const signUp= async(req,res)=>{
    try {
      const {username,password,email}= req.body
  
-     const user=await User.findOne({email})
+     const user=await User.findOne({
+        $or:[{email},{username}]
+     })
      if (user) {
          return res.status(400).json({succes:false,message:"user already exists please login"})
      }
@@ -61,6 +63,9 @@ const usernameCheck= async (req,res)=>{
 const logIn= async(req,res)=>{
      try {
         const {email,password}= req.body
+        if (!email || !password) {
+            return res.status(400).json({succes:false,message:"email and password are required"})
+        }
         const user= await User.findOne({email}).select("--password")
         if (!user) {
            return res.status(404).json({succes:false,message:"user doest not exist"})
@@ -82,7 +87,7 @@ const logIn= async(req,res)=>{
        .cookie("refreshToken",refreshToken,option)
        .json({message:"user succesfyly logged in" })
      } catch (error) {
-        return res.status(500).json({error, message:"Something went wrong"})
+        return res.status(500).json({succes:false,error:error.message, message:"Something went wrong"})
      }
 }
 
