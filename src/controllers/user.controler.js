@@ -63,6 +63,8 @@ const usernameCheck= async (req,res)=>{
 const logIn= async(req,res)=>{
      try {
         const {email,password}= req.body
+        console.log("new request");
+        
         if (!email || !password) {
             return res.status(400).json({succes:false,message:"email and password are required"})
         }
